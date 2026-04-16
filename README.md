@@ -1,2 +1,2 @@
 # wonju
-<mark>코딩 유망주가 있는 곳</mark>
+<strong><mark>사쿠라지마 마이의 남자친구가 다니는 고등학교가 궁금하신가요?</mark></strong>

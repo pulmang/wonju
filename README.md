@@ -5,4 +5,7 @@
 <br>
 <strong><em>원 주 고 등 학 교</em></strong>입니다.<br>
 <br>
-그리고 그 남자는 <strong><em><mark>김지후</mark></em></strong><br>
+그리고 그 남자는<br>
+<br>
+<strong><em><mark>김지후</mark></em></strong><br>
+(웅장한 노래가 나오기 시작한다.)

@@ -1,17 +1,179 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>tprtm온더비치</title></title>
-</head>
-<body>
-    <h1>시의 예</h1>
-    <pre>
-        <b><mark>김건욱</mark></b>이 불려가는 곳
-        <span style="color:red;">그곳에 <strong><em>경기도</em></strong>가 머무네</span>
 
-        <b>설렘</b>이 그치는 곳
-        그곳에 <strong>원주</strong>가 쉬어가네네
-    </pre>
+<head>
+<meta charset="UTF-8">
+<title>김 지 후 자기소개 페이지</title>s
+
+
+<div class="container">
+<h1>김    지    후의 페이지</h1>
+<hr>
+<img src="image/김지후.jpg" alt="내 프로필사진">
+<p>위는 김지후의 사진입니다.</p>
+
+<hr>
+<div class="box">
+
+<h3>나의 취미</h3>
+
+<ul>
+
+<li>게임하기</li>
+
+<li>유튜브 보기</li>
+
+<li>운동하기 (축구, VR 등등)</li>
+<hr>
+</ul>
+
+</div>
+
+
+
+
+
+<div class="box">
+
+<h3>🎵 나의 BGM</h3>
+
+
+<audio id="bgm" loop>
+
+<source src="audio/불가사의의카르테.mp3" type="audio/mp3">
+
+</audio>
+
+
+<button onclick="playMusic()">
+
+🎵 음악 듣기
+
+</button>
+
+
+<button onclick="stopMusic()">
+
+⏸ 음악 끄기
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="box">
+
+<hr>
+<h3>나의 목표</h3>
+
+
+<p>
+
+GREAT GF 만들기<br>
+<img src="image/세상에서제일예쁜마이상.jpg" alt="내 이상형">
+<p></p>
+
+프로그래밍 배우기<br>
+<p></p>
+멋진 프로그램 만들기
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="box">
+
+<hr>
+<h3>좋아하는 것</h3>
+
+
+<p>
+
+⚽ 축구<br>
+
+🎮 게임<br>
+
+📺 유튜브<br>
+
+🎧 음악 듣기
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+<p>
+
+더 많은 정보를 원하시면
+
+<a href="https://www.google.com" target="_blank">
+
+구글
+
+</a>
+
+을 방문하세요.
+
+</p>
+
+
+
+<footer>
+
+© 2026 김지후 자기소개 페이지
+
+</footer>
+
+
+
+</div>
+
+
+
+
+<script>
+
+let music = document.getElementById("bgm");
+
+
+function playMusic(){
+
+    music.play();
+
+}
+
+
+function stopMusic(){
+
+    music.pause();
+
+}
+
+
+</script>
+
+
+
 </body>
+
 </html>

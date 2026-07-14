@@ -421,9 +421,9 @@
         /* ================= Animation 섹션 ================= */
         .anime-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr); /* 3단 배열로 깔끔하게 정렬 */
             gap: 40px;
-            width: 100%; max-width: 1000px;
+            width: 100%; max-width: 1100px;
             margin-top: 30px;
         }
         .anime-card {
@@ -448,6 +448,7 @@
         /* 모바일 반응형 중간 보완 */
         @media (max-width: 992px) {
             .about-cards-grid { grid-template-columns: repeat(2, 1fr); }
+            .anime-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 768px) {
             .about-top-info { flex-direction: column; gap: 15px; text-align: center; }
@@ -489,8 +490,10 @@
             <div id="clock">00:00:00</div>
         </nav>
 
+        <!-- 오디오 태그들 -->
         <audio id="bgm-home" src="audio/gbc.mp3" loop></audio>
         <audio id="bgm-anime" src="audio/불가사의의카르테.mp3" loop></audio>
+        <audio id="bgm-happy" src="audio/happy.mp3"></audio>
 
         <!-- Home 섹션 -->
         <section id="home">
@@ -587,16 +590,24 @@
         <!-- Animation 섹션 -->
         <section id="animation">
             <h1 class="fade-in">레전드애니 모음</h1>
-            <button class="audio-toggle fade-in" id="toggle-anime-bgm" style="margin-top: 15px; margin-bottom: 10px;">Animation 배경음악 ON</button>
+            <button class="audio-toggle fade-in" id="toggle-anime-bgm" style="margin-top: 15px; margin-bottom: 10px;">Animation 배경음악 OFF</button>
             
             <div class="anime-grid">
                 <div class="glass-card anime-card fade-in">
                     <h2>청춘돼지 시리즈</h2>
                     <p>엄청난 후유증 (극장판 필수)</p>
+                    <img src="image/pig.jpg" alt="사진 설명" width="100">
                 </div>
                 <div class="glass-card anime-card fade-in">
                     <h2>진격의 거인</h2>
                     <p>개쩌는 빌드업</p>
+                    <img src="image/aot.jpg" alt="사진 설명" width="100">
+                </div>
+                <!-- ★ 블리치 카드 추가 완료 ★ -->
+                <div class="glass-card anime-card fade-in">
+                    <h2>블리치</h2>
+                    <p>반카이!!</p>
+                    <img src="image/movie.jpg" alt="사진 설명" width="100">
                 </div>
             </div>
         </section>
@@ -626,8 +637,11 @@
         
         const bgmHome = document.getElementById('bgm-home');
         const bgmAnime = document.getElementById('bgm-anime');
+        const bgmHappy = document.getElementById('bgm-happy');
+        
+        // 초기 오디오 제어 변수
         let homeAudioOn = true;
-        let animeAudioOn = true;
+        let animeAudioOn = false;
 
         const btnHomeBgm = document.getElementById('toggle-home-bgm');
         const btnAnimeBgm = document.getElementById('toggle-anime-bgm');
@@ -641,20 +655,16 @@
                 const star = document.createElement('div');
                 star.classList.add('sparkle-star');
                 
-                // 화면 전체에 골고루 분포
                 star.style.left = `${Math.random() * 100}vw`;
                 star.style.top = `${Math.random() * 100}vh`;
                 
-                // 2px ~ 6px 사이의 다양한 크기
                 const size = Math.random() * 4 + 2;
                 star.style.width = `${size}px`;
                 star.style.height = `${size}px`;
                 
-                // 다채롭고 엇갈리는 반짝임을 위해 딜레이 및 재생 속도 랜덤화
                 star.style.animationDelay = `${Math.random() * 2}s`;
                 star.style.animationDuration = `${Math.random() * 1.2 + 0.6}s`;
                 
-                // 파란색 별과 흰색 별 비중 조절
                 if (Math.random() > 0.5) {
                     star.style.boxShadow = '0 0 10px #fff, 0 0 18px var(--accent)';
                 }
@@ -677,7 +687,11 @@
                 mainSite.style.display = 'block';
                 switchTab('home');
                 
-                // 화면 진입 후 전환 화면의 별 오브젝트들을 정리해 성능 최적화
+                // 홈 화면 진입 후 홈 배경음악 최초 자동 재생
+                if (homeAudioOn) {
+                    bgmHome.play().catch(()=>{});
+                }
+                
                 setTimeout(() => {
                     const stars = transScreen.querySelectorAll('.sparkle-star');
                     stars.forEach(s => s.remove());
@@ -685,7 +699,7 @@
             }, 3000);
         });
 
-        // ================= 2. 독립된 화면(탭) 전환 로직 =================
+        // ================= 2. 독립된 화면(탭) 전환 로직 (BGM 정지 코드 제거) =================
         function switchTab(tabId) {
             const sections = document.querySelectorAll('section');
             sections.forEach(sec => {
@@ -710,21 +724,7 @@
 
             window.scrollTo(0, 0);
 
-            if (tabId === 'home') {
-                if (homeAudioOn) {
-                    bgmHome.currentTime = 0; 
-                    bgmHome.play().catch(()=>{});
-                    btnHomeBgm.innerText = "Home 배경음악 ON";
-                }
-                bgmAnime.pause();
-            } else if (tabId === 'animation') {
-                if (animeAudioOn) bgmAnime.play().catch(()=>{});
-                bgmHome.pause();
-            } else {
-                bgmHome.pause();
-                bgmAnime.pause();
-            }
-
+            // 폭죽 효과는 Contact 탭에서만 활성화
             if (tabId === 'contact') {
                 startFireworks();
             } else {
@@ -732,10 +732,16 @@
             }
         }
 
-        // ================= 3. BGM 수동 토글 로직 =================
+        // ================= 3. BGM 상호 연동 수동 토글 로직 =================
         btnHomeBgm.addEventListener('click', () => {
             homeAudioOn = !homeAudioOn;
             if (homeAudioOn) {
+                // 다른 재생 중일 수 있는 오디오 전부 정지
+                bgmAnime.pause();
+                animeAudioOn = false;
+                btnAnimeBgm.innerText = "Animation 배경음악 OFF";
+                bgmHappy.pause(); // 해피송도 플레이 중이라면 정지
+
                 bgmHome.play().catch(()=>{});
                 btnHomeBgm.innerText = "Home 배경음악 ON";
             } else {
@@ -747,6 +753,12 @@
         btnAnimeBgm.addEventListener('click', () => {
             animeAudioOn = !animeAudioOn;
             if (animeAudioOn) {
+                // 다른 재생 중일 수 있는 오디오 전부 정지
+                bgmHome.pause();
+                homeAudioOn = false;
+                btnHomeBgm.innerText = "Home 배경음악 OFF";
+                bgmHappy.pause(); // 해피송도 플레이 중이라면 정지
+
                 bgmAnime.play().catch(()=>{});
                 btnAnimeBgm.innerText = "Animation 배경음악 ON";
             } else {
@@ -812,13 +824,31 @@
             });
         });
 
-        // ================= 7. 티어표 내부 연출 및 다니엘 클라이밍 =================
+        // ================= 7. 티어표 내부 연출 및 다니엘 클라이밍 + 해피송(15초 재생) =================
         const gameBtn = document.getElementById('game-btn');
         let gamePlayed = false;
 
         gameBtn.addEventListener('click', () => {
             if (gamePlayed) return; 
             gamePlayed = true;
+
+            // 1) 다른 음악 전체 오프(All-Kill) 및 버튼 문구 변경
+            bgmHome.pause();
+            bgmAnime.pause();
+            homeAudioOn = false;
+            animeAudioOn = false;
+            btnHomeBgm.innerText = "Home 배경음악 OFF";
+            btnAnimeBgm.innerText = "Animation 배경음악 OFF";
+
+            // 2) happy.mp3 재생 시작
+            bgmHappy.currentTime = 0;
+            bgmHappy.play().catch(()=>{});
+
+            // 3) 15초(15000ms) 뒤 정지 타이머 예약
+            setTimeout(() => {
+                bgmHappy.pause();
+                bgmHappy.currentTime = 0;
+            }, 15000);
 
             const tierList = document.getElementById('tierList');
             const hobbyPool = document.getElementById('hobbyPool');
@@ -827,16 +857,14 @@
             const objs = document.querySelectorAll('.game-obj');
             const tierRows = document.querySelectorAll('.tier-row');
 
-            // 1. 기존 티어표 행들과 하단 풀을 부드럽게 숨김 (공간 유지 및 클린 연출)
             tierRows.forEach(row => row.style.opacity = '0');
             hobbyPool.style.opacity = '0';
             hobbyPool.style.pointerEvents = 'none';
 
-            // 2. 취미 아이템들을 티어표 내부로 모아서 계단 레이아웃 빌드
             objs.forEach((obj, index) => {
                 obj.setAttribute('draggable', 'false');
                 obj.style.cursor = 'default';
-                tierList.appendChild(obj); // 무대를 티어표 박스 내부로 병합
+                tierList.appendChild(obj);
                 
                 obj.style.position = 'absolute';
                 const leftPos = 12 + (index * 15); 
@@ -850,13 +878,11 @@
                 }, 100);
             });
 
-            // 3. 티어표 최상단 공간에 축하 텍스트 페이드인 활성화
             setTimeout(() => {
                 danielText.style.opacity = '1';
                 danielText.style.transform = 'translate(-50%, 0) scale(1.1)';
             }, 1000);
 
-            // 4. 다니엘이 티어표 내부 좌측 밑바닥에서 등장하여 한 칸씩 정복하며 등반
             setTimeout(() => {
                 danielImg.style.opacity = '1';
                 
